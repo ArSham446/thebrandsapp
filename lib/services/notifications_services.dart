@@ -41,12 +41,6 @@ class NotificationsServices {
         ));
   }
 
-  Future<String> getDeviceToken() async {
-    String deviceToken = await _firebaseMessaging.getToken() ?? '';
-    debugPrint('token: $deviceToken');
-    return deviceToken;
-  }
-
   void requestPermission() async {
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
@@ -57,6 +51,28 @@ class NotificationsServices {
       provisional: false,
       sound: true,
     );
-    debugPrint('User granted permission: ${settings.authorizationStatus}');
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  Future<String> getToken() async {
+    String? token = await _firebaseMessaging.getToken();
+    print('Customers App ///// Token: $token');
+    debugPrint('Customers App ///// Token: $token');
+    return token!;
+  }
+
+  void isTokenRefreshed() async {
+    _firebaseMessaging.onTokenRefresh.listen((event) {
+      print('Customers App ///// Token: $event');
+      debugPrint('Customers App ///// Token: $event');
+    });
   }
 }

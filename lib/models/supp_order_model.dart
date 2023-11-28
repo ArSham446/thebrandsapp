@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:thebrandsapp/widgets/snackbar.dart';
+import 'package:http/http.dart' as http;
 
 class SupplierOrderModel extends StatelessWidget {
   final dynamic order;
@@ -13,6 +15,46 @@ class SupplierOrderModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String token = '';
+    Future<void> sendNotification(String stats) async {
+      await FirebaseFirestore.instance
+          .collection('customers')
+          .doc(order['cid'])
+          .collection('tokens')
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          token = element['token'];
+          debugPrint('token is $token');
+        }
+      });
+
+      var data = {
+        "notification": {
+          "title": "Order Status",
+          "body": "Your order status has been changed to $stats",
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+          "sound": "default"
+        },
+        "priority": "high",
+
+        //list of tokens
+        'to': token
+      };
+      try {
+        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            body: jsonEncode(data),
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization':
+                  'key=AAAAV2OaltE:APA91bFdRb9lHBTieJhv3sKIDbdQCdrrQkarHM9NF0j71EdP7Row40AQ6eOl9v1fqK6QTbCR2hEdkJPL98fNbDTbDX0ps7nSlR8YNXX46v2uRWYyTaQtfdNtA2v68mtabnTBqHMOZcSm'
+            });
+        debugPrint('notification sent');
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
     final GlobalKey<ScaffoldMessengerState> scaffoldKey =
         GlobalKey<ScaffoldMessengerState>();
     return ScaffoldMessenger(
@@ -168,9 +210,13 @@ class SupplierOrderModel extends StatelessWidget {
                                                   .update({
                                                 'deliverystatus': 'shipping',
                                                 'deliverydate': pickedDate,
-                                              }).then((value) {
-                                                Get.snackbar('Success',
-                                                    'Order Shipped Successfully');
+                                              }).then((value) async {
+                                                await sendNotification(
+                                                        'shipping')
+                                                    .then((value) {
+                                                  Get.snackbar('Success',
+                                                      'Order Shipping Successfully');
+                                                });
                                               });
                                             }
                                           },
@@ -183,9 +229,13 @@ class SupplierOrderModel extends StatelessWidget {
                                                 .doc(order['orderid'])
                                                 .update({
                                               'deliverystatus': 'delivered',
-                                            }).then((value) {
-                                              Get.snackbar('Success',
-                                                  'Order Delivered Successfully');
+                                            }).then((value) async {
+                                              await sendNotification(
+                                                      'delivered')
+                                                  .then((value) {
+                                                Get.snackbar('Success',
+                                                    'Order Delivered Successfully');
+                                              });
                                             });
                                           },
                                           child: const Text('delivered ?'))

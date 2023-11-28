@@ -64,13 +64,10 @@ class DashboardScreen extends StatelessWidget {
                     },
                     tabYes: () async {
                       await AuthRepo.logOut()
-                          .whenComplete(() => clearUserId(context));
-                      await Future.delayed(const Duration(microseconds: 100))
-                          .whenComplete(() {
-                        Navigator.pop(context);
-                        Navigator.pushReplacementNamed(
-                            context, '/supplier_login');
-                      });
+                          .whenComplete(() => clearUserId(context))
+                          .whenComplete(() => Navigator.pop(context));
+                      Navigator.pushReplacementNamed(
+                          context, '/supplier_login');
                     });
               },
               icon: const Icon(

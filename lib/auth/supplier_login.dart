@@ -53,9 +53,7 @@ class _SupplierLoginState extends State<SupplierLogin> {
           FirebaseFirestore.instance
               .collection("suppliers")
               .doc(user.uid)
-              .collection("tokens")
-              .doc()
-              .set({"token": token});
+              .update({"token": token});
 
           _formKey.currentState!.reset();
           setUserId(user);

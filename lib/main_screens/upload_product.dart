@@ -48,7 +48,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   void initState() {
     super.initState();
 
-    firebaseNotifications.getDeviceToken().then((value) {
+    firebaseNotifications.getToken().then((value) {
       token = value;
       print('token: $token');
     });

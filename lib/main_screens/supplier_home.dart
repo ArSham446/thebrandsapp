@@ -50,6 +50,8 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
   @override
   void initState() {
     super.initState();
+    notificationsServices.getToken();
+    notificationsServices.isTokenRefreshed();
     notificationsServices.requestPermission;
     setupInteractedMessage();
     docId = context.read<IdProvider>().getData;
