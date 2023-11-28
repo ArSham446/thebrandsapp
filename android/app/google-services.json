@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "375333230289",
+    "project_id": "thebrandsapp-fc8ae",
+    "storage_bucket": "thebrandsapp-fc8ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375333230289:android:2fe75882fcf4a635ef97f0",
+        "android_client_info": {
+          "package_name": "com.example.thebrandsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOVYvm5bAKGoXqYQoGxKZGS_EPyLYKs_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
