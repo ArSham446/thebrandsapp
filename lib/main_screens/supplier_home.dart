@@ -117,9 +117,34 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
                   label: 'Upload',
                 ),
               ],
-              onTap: (index) {
-                setState(() {
-                  _selectedIndex = index;
+              onTap: (index) async {
+                await FirebaseFirestore.instance
+                    .collection('suppliers')
+                    .doc(docId)
+                    .get()
+                    .then((value) {
+                  debugPrint(value['status']);
+                  setState(() {
+                    if (index == 0) {
+                      _selectedIndex = index;
+                    } else {
+                      if (value['status'] == 'active') {
+                        _selectedIndex = index;
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Your account is not approved yet',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  });
                 });
               },
             ),

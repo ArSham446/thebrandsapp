@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thebrandsapp/dashboard_components/warning.dart';
 import '../dashboard_components/manage_products.dart';
 import '../dashboard_components/supplier_balance.dart';
 import '../dashboard_components/supplier_orders.dart';
@@ -13,10 +14,11 @@ import '../widgets/appbar_widgets.dart';
 
 List<String> label = [
   'my store',
-  'orders',
-  'manage products',
+  'Orders',
+  'Manage products',
   'balance',
-  'statics'
+  'Statics',
+  'Warning'
 ];
 
 List<IconData> icons = [
@@ -24,7 +26,8 @@ List<IconData> icons = [
   Icons.shop_2_outlined,
   Icons.edit,
   Icons.attach_money,
-  Icons.show_chart
+  Icons.show_chart,
+  Icons.warning_rounded
 ];
 
 List<Widget> pages = [
@@ -32,7 +35,8 @@ List<Widget> pages = [
   const SupplierOrders(),
   ManageProducts(),
   const Balance(),
-  const Statics()
+  const Statics(),
+  const Warning(),
 ];
 
 class DashboardScreen extends StatelessWidget {
@@ -82,7 +86,7 @@ class DashboardScreen extends StatelessWidget {
           mainAxisSpacing: 50,
           crossAxisSpacing: 50,
           crossAxisCount: 2,
-          children: List.generate(5, (index) {
+          children: List.generate(6, (index) {
             return InkWell(
               onTap: () {
                 Navigator.push(context,
